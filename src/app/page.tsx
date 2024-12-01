@@ -1,95 +1,71 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+import 'bootstrap/dist/css/bootstrap.css';
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  async function data(e: any){
+    e.preventDefault();
+
+    const data = {
+      String: (e.target.string.value)
+    }
+    
+    const stringSeparated = data.String.split("")
+
+    handleDeletions(stringSeparated)
+
+  }
+  
+  async function handleDeletions(String: any){
+    const newString:any = [];
+
+    var n = 0;
+    for(let i = 0; i < String.length; i++){
+        if(String[i] == "#"){
+          n++
+        }
+    }
+
+    if(n > String.length - n){
+      newString.push('')
+      alert(newString)
+      
+    }else{
+
+      for (let i = 0; i < String.length; i++) {
+        const currentSymbol = String[i];
+        const nextSymbol = String[i + 1];
+        
+        if (currentSymbol != "#" && nextSymbol == "#") {
+          let index = String.indexOf(`${nextSymbol}`);
+          String.splice(index, 1);
+          index = String.indexOf(`${currentSymbol}`);
+          String.splice(index, 1);
+        }
+      }
+
+      const found = String.find((element:string) => element == "#");
+
+      if(found == "#"){
+        handleDeletions(String)
+      }else{
+        alert(String.reduce((accumulator:any, current:any) => accumulator + current))
+      }
+
+    }
+}
+
+  return (
+      <form onSubmit={data} className="container col-6 text-center mt-4 bg-light">
+        <div>
+            <div className="d-flex justify-content-center form-group">
+                <div className="form-group col-5 px-md-4 mb-3">
+                    <label>String</label>
+                    <input type="text" className="form-control" id="string" required aria-describedby="emailHelp " />
+                </div>
+            </div>
+            <button type="submit" className="btn btn-primary mt-3 mx-auto d-block">Send Recipe</button>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    </form>
   );
 }
